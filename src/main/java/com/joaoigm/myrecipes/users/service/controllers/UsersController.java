@@ -21,6 +21,11 @@ public class UsersController {
         return userRepository.findAll();
     }
 
+    @GetMapping("/authenticated")
+    public boolean getUserAuthenticated(@RequestParam Integer id){
+        return userRepository.existsById(id);
+    }
+
     @GetMapping("/{id}")
     public @ResponseBody User getUser(@PathVariable("id") Integer id){
         return userRepository.findById(id).get();
