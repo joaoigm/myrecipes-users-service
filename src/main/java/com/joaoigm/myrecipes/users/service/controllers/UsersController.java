@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -22,12 +23,12 @@ public class UsersController {
     }
 
     @GetMapping("/authenticated")
-    public boolean getUserAuthenticated(@RequestParam Integer id){
+    public boolean getUserAuthenticated(@RequestParam UUID id){
         return userRepository.existsById(id);
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody User getUser(@PathVariable("id") Integer id){
+    public @ResponseBody User getUser(@PathVariable("id") UUID id){
         return userRepository.findById(id).get();
     }
 
@@ -35,6 +36,7 @@ public class UsersController {
     public @ResponseBody User createUser(@RequestBody User user){
         try {
             user.generateNewPassword();
+            user.generateId();
             return userRepository.save(user);
         }
         catch (Exception e) { throw e; }
@@ -46,7 +48,7 @@ public class UsersController {
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Object deleteUser(@PathVariable("id")Integer id){
+    public @ResponseBody Object deleteUser(@PathVariable("id")UUID id){
         if(!userRepository.existsById(id)){ return Collections.singletonMap("message", "User with id "+id+" doesn't exist"); }
         userRepository.deleteById(id);
         return Collections.singletonMap("message", "User deleted successful");

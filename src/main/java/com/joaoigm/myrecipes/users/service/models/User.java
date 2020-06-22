@@ -1,28 +1,23 @@
 package com.joaoigm.myrecipes.users.service.models;
 
 import com.joaoigm.myrecipes.utils.PasswordGenerator;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-import java.lang.annotation.RetentionPolicy;
+import java.util.UUID;
 
-@Entity
+@Document(collection = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    @Column(unique = true)
+    private UUID id;
     private String email;
     private String password;
 
     
 
-    public int getId() {
+    public UUID getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -36,6 +31,8 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    public void generateId(){ this.id = UUID.randomUUID(); }
 
     public void setPassword(String password) {
         this.password = password;
